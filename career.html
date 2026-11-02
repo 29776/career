@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>职业赛道测试</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            careerBlue: '#4A88C8',
+            careerMint: '#7FB3D5',
+            careerBg: '#F4F8FC',
+            careerCard: '#FFFFFF',
+            careerText: '#2B3A4F',
+            careerSub: '#6E7F94'
+          },
+          fontFamily: {
+            sans: ['PingFang SC', 'Microsoft YaHei', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: linear-gradient(180deg, #EAF2FB 0%, #F4F8FC 40%, #FFFFFF 100%);
+      min-height: 100vh;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 30px rgba(74, 136, 200, 0.12);
+    }
+    .option-card {
+      background: #fff;
+      border: 1px solid #DCE8F5;
+      transition: all .25s ease;
+    }
+    .option-card:hover {
+      background: #EEF5FC;
+      border-color: #4A88C8;
+      transform: translateY(-2px);
+    }
+    .result-card {
+      background: linear-gradient(140deg, #EAF2FB, #FFFFFF);
+      border: 1px solid #DCE8F5;
+      box-shadow: 0 20px 40px rgba(74, 136, 200, 0.15);
+    }
+    .tag {
+      background: #EEF5FC;
+      color: #4A88C8;
+    }
+    .title-font {
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body class="font-sans text-careerText">
+
+<div class="max-w-md mx-auto px-5 pt-10 pb-10">
+
+  <!-- 顶部标题 -->
+  <div class="text-center mb-6">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 text-careerBlue text-xs font-semibold shadow-sm">
+      <i class="fa fa-briefcase"></i> 职业倾向自测
+    </div>
+    <h1 class="title-font text-3xl mt-3 text-careerText">职业赛道测试</h1>
+    <p class="text-careerSub text-sm mt-2">16题发现你的天赋倾向</p>
+  </div>
+
+  <!-- 免责声明 -->
+  <div class="glass-card rounded-2xl px-4 py-3 mb-5 text-xs text-careerSub leading-relaxed">
+    ⚠️ 娱乐趣味自测，仅供参考，不属于专业职业测评，不能替代专业职业规划建议。
+  </div>
+
+  <!-- 答题区 -->
+  <div id="careerQuestionBox" class="glass-card rounded-3xl p-6">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs text-careerSub">进度</span>
+      <span id="careerProgress" class="text-sm font-bold text-careerBlue">1 / 16</span>
+    </div>
+
+    <div class="w-full h-2 bg-blue-100 rounded-full overflow-hidden mb-5">
+      <div id="careerProgressBar" class="h-full bg-gradient-to-r from-careerMint to-careerBlue rounded-full transition-all duration-400" style="width: 6.25%"></div>
+    </div>
+
+    <h2 id="careerQuestionTitle" class="text-lg font-bold leading-relaxed mb-5"></h2>
+
+    <div id="careerOptions"></div>
+  </div>
+
+  <!-- 结果区 -->
+  <div id="careerResultBox" class="hidden">
+    <div class="result-card rounded-3xl p-6 mb-5">
+      <div class="text-center mb-4">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white shadow-sm mb-3">
+          <i class="fa fa-compass text-2xl text-careerBlue"></i>
+        </div>
+        <h3 id="careerResultTitle" class="title-font text-xl text-careerText"></h3>
+      </div>
+
+      <p id="careerResultDesc" class="text-sm leading-relaxed text-careerText/80 mb-4"></p>
+
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span id="careerTag1" class="tag text-xs px-3 py-1 rounded-full font-semibold"></span>
+        <span id="careerTag2" class="tag text-xs px-3 py-1 rounded-full font-semibold"></span>
+      </div>
+
+      <div class="space-y-3">
+        <div class="bg-white/80 rounded-2xl p-4">
+          <div class="text-xs text-careerBlue font-bold mb-1">优势</div>
+          <p id="careerAdvantage" class="text-sm"></p>
+        </div>
+        <div class="bg-white/80 rounded-2xl p-4">
+          <div class="text-xs text-careerBlue font-bold mb-1">短板</div>
+          <p id="careerWeak" class="text-sm"></p>
+        </div>
+        <div class="bg-white/80 rounded-2xl p-4">
+          <div class="text-xs text-careerBlue font-bold mb-1">发展建议</div>
+          <p id="careerTip" class="text-sm"></p>
+        </div>
+      </div>
+
+      <div class="mt-5 border-t border-blue-100 pt-4 text-center">
+        <p id="careerSlogan" class="title-font text-careerBlue italic"></p>
+      </div>
+    </div>
+
+    <button onclick="restartCareer()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-careerMint to-careerBlue text-white font-bold shadow-lg shadow-blue-200/40 active:scale-95 transition">
+      重新测试
+    </button>
+  </div>
+
+</div>
+
+<script>
+const careerQuestions = [
+  {q:"周末给你一天自由工作，你更愿意？",o:["独立安静完成任务，少社交沟通","和团队头脑风暴，讨论想法、对接别人","做创意、脑洞类内容，不用死守固定流程","处理规则、数据、故障排查，把问题修好"]},
+  {q:"遇到项目突发问题，你第一反应？",o:["先冷静收集信息，自己慢慢排查","找同事沟通，一起商量解决方案","想有没有新颖办法绕开传统方案","优先按流程定位根源，快速恢复稳定"]},
+  {q:"长期重复的固定流程工作，你的感受？",o:["只要不用频繁社交，重复也可以接受","长期单调会无聊，需要定期与人对接交流","非常枯燥，受不了一成不变的工作","很适应，喜欢有清晰规则、标准的任务"]},
+  {q:"做项目的成就感来源是？",o:["独立完成任务，靠自己搞定难题","团队协作落地，得到他人认可","产出创意内容、设计、新想法","系统稳定、故障解决、数据正常"]},
+  {q:"工作沟通偏好？",o:["文字简洁沟通，尽量少开会","喜欢面对面或会议沟通，直接交流想法","轻松自由交流，讨厌死板的汇报形式","沟通只抓重点，聚焦问题本身，不爱废话"]},
+  {q:"你更愿意深耕？",o:["个人专业硬技能，做领域专家","人脉、资源、沟通、业务对接","内容创作、策划、IP、新媒体","系统、运维、技术支持、数据、风控"]},
+  {q:"领导给你模糊任务，你会？",o:["有点焦虑，需要自己慢慢梳理边界","主动沟通确认需求，对齐预期","很兴奋，可以自由发挥","难受，喜欢清晰目标、可量化标准"]},
+  {q:"工作压力大的时候，你会？",o:["独自消化，安静专注做事解压","和同事朋友倾诉，讨论问题释放压力","做点创意小事转移情绪","拆解问题，逐个解决，搞定问题就放松"]},
+  {q:"选工作，你优先看重？",o:["低内耗、少人际拉扯，专注做自己的事","成长空间，平台与人脉机会","自由度，不被死板制度束缚","稳定、风险可控，结果可预期"]},
+  {q:"你更擅长？",o:["深度钻研，长时间专注一个难题","理解他人诉求，协调多方","挖掘新点子，写文案、构思策划","发现异常、排查问题、维护系统"]},
+  {q:"团队有矛盾冲突，你倾向？",o:["尽量不参与，做好自己分内工作","主动调解，协调双方，推进事情落地","想新方案绕开矛盾，换个思路做事","就事论事，只看问题本身，不纠结情绪"]},
+  {q:"对于长期加班或应急值班，你的接受度？",o:["可以接受，只要不用大量人际应酬","如果是团队共同攻坚可以接受，长期夜班会疲惫","抗拒固定夜班，希望时间相对灵活","可以接受，只要故障处理有明确流程"]},
+  {q:"学习新东西，你更喜欢？",o:["自己看文档、自学、反复实操试错","和别人交流讨论，边聊边学","看案例、找灵感，自由探索","看手册、标准文档，按规范上手"]},
+  {q:"你更讨厌哪种职场状态？",o:["无休止无效会议、复杂办公室人情","独自埋头干活，长期没有交流反馈","所有事情都被条条框框限制，不能创新","目标模糊，没有标准，到处踩坑"]},
+  {q:"未来职业理想状态？",o:["靠个人专业能力，成为技术专家","带领团队、做业务、管理、商务","自由创作，内容、自媒体、策划、IP","系统稳定，风险可控，减少突发事故"]},
+  {q:"做复盘总结，你习惯？",o:["私下自我复盘，很少对外输出","和团队一起复盘，交换观点","总结亮点，思考下一次怎么玩出新花样","定位根因，整理文档，预防再次故障"]}
+];
+
+const careerResult = {
+  A:{
+    title:"技术专家 / 独立深耕赛道",
+    desc:"你更适合能沉下心打磨硬技能的方向。你内向专注，擅长长时间独立钻研，不喜欢复杂人情内耗。在安静、有清晰标准、能自主掌控节奏的环境里，你的能力会发挥得最好。",
+    tag1:"深度钻研",
+    tag2:"独立解决问题",
+    advantage:"专注力强，能把复杂问题拆透，靠专业能力建立壁垒。",
+    weak:"不太喜欢主动争取机会，有时会忽略职场关系和反馈。",
+    tip:"选一门可复用的硬技能持续深耕，同时少量学习沟通和表达，让能力被更多人看见。",
+    slogan:"不用强迫自己社交，你的核心竞争力，是沉下心深耕专业的能力。"
+  },
+  B:{
+    title:"业务 / 管理 / 沟通赛道",
+    desc:"你更适合连接人和资源的方向。你擅长理解他人需求，喜欢协调推进，在沟通协作中更容易获得成就感。适合做需要对齐多方、推动项目落地的工作。",
+    tag1:"协调推进",
+    tag2:"人际连接",
+    advantage:"共情力强，能理解不同角色诉求，推动事情真正落地。",
+    weak:"长期独处钻研枯燥技术时，容易感到无聊和失去耐心。",
+    tip:"重点打磨沟通、项目推进和资源整合能力，逐步积累行业人脉与信任感。",
+    slogan:"你的天赋不在单打独斗，而在连接人和资源，推动事情落地。"
+  },
+  C:{
+    title:"创意内容赛道",
+    desc:"你更适合有新鲜感、能自由表达的方向。你讨厌死板流程，脑洞丰富，对情绪、审美和热点更敏感。重复机械工作会快速消耗你的热情，你需要能发挥想法的空间。",
+    tag1:"内容感知",
+    tag2:"创意表达",
+    advantage:"对情绪和趋势敏感，能产出有感染力的内容，容易抓住别人注意力。",
+    weak:"长期做标准化、流程化任务时，容易倦怠。",
+    tip:"持续积累作品案例，把想法变成可复用的内容产品，建立个人辨识度。",
+    slogan:"你不适合被流水线困住，你的价值来自你的想法与创造力。"
+  },
+  D:{
+    title:"稳定风控 / 运维 / 流程类赛道",
+    desc:"你更适合规则清晰、重视稳定和风险控制的方向。你喜欢标准，擅长发现异常、排查问题，面对突发情况比较冷静。你的价值在于让系统、流程或结果更可控。",
+    tag1:"风险控制",
+    tag2:"排障复盘",
+    advantage:"抗压性好，能定位问题、整理规范，减少重复故障和意外。",
+    weak:"面对模糊需求和强创意类工作，容易觉得没有抓手。",
+    tip:"深耕流程、自动化、排障和标准化能力，成为稳定保障型角色。",
+    slogan:"别人害怕突发危机，而你的天赋，就是稳住秩序，解决突发故障。"
+  }
+};
+
+let careerIndex = 0;
+let careerScore = {A:0,B:0,C:0,D:0};
+
+function renderCareer(){
+  const p = careerQuestions[careerIndex];
+  document.getElementById("careerProgress").innerText = `${careerIndex + 1} / 16`;
+  document.getElementById("careerProgressBar").style.width = ((careerIndex + 1) / 16 * 100) + "%";
+  document.getElementById("careerQuestionTitle").innerText = p.q;
+
+  const labels = ["A","B","C","D"];
+  document.getElementById("careerOptions").innerHTML = p.o.map((opt,i)=>`
+    <div class="option-card rounded-2xl p-4 mb-3 cursor-pointer" onclick="selectCareer('${labels[i]}')">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-blue-50 text-careerBlue flex items-center justify-center font-bold text-sm">${labels[i]}</div>
+        <div class="text-sm flex-1">${opt}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function selectCareer(t){
+  careerScore[t]++;
+  careerIndex++;
+  if(careerIndex >= careerQuestions.length){
+    showCareerResult();
+  }else{
+    renderCareer();
+  }
+}
+
+function showCareerResult(){
+  document.getElementById("careerQuestionBox").classList.add("hidden");
+  document.getElementById("careerResultBox").classList.remove("hidden");
+
+  let maxKey = Object.keys(careerScore).reduce((a,b)=>careerScore[a]>careerScore[b]?a:b);
+  const r = careerResult[maxKey];
+
+  document.getElementById("careerResultTitle").innerText = "✅ " + r.title;
+  document.getElementById("careerResultDesc").innerText = r.desc;
+  document.getElementById("careerTag1").innerText = r.tag1;
+  document.getElementById("careerTag2").innerText = r.tag2;
+  document.getElementById("careerAdvantage").innerText = r.advantage;
+  document.getElementById("careerWeak").innerText = r.weak;
+  document.getElementById("careerTip").innerText = r.tip;
+  document.getElementById("careerSlogan").innerText = r.slogan;
+}
+
+function restartCareer(){
+  careerIndex = 0;
+  careerScore = {A:0,B:0,C:0,D:0};
+  document.getElementById("careerQuestionBox").classList.remove("hidden");
+  document.getElementById("careerResultBox").classList.add("hidden");
+  renderCareer();
+}
+
+renderCareer();
+</script>
+
+</body>
+</html>
